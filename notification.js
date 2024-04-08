@@ -93,6 +93,25 @@ async function send_custom_notification(xss_payload_fire_data, custom_webhook) {
 	return true;
 }
 
+
+async function send_custom_GET_notification(payload, custom_webhook) {
+	fetch(
+		custom_webhook,
+		{
+		  method: 'post',
+		  headers: {
+			'Content-Type': 'application/json',
+		  },
+		  body: JSON.stringify({
+			sender: 'XSS Hunter',
+			content: `GET triggered on ${payload}`,
+		  }),
+		}
+	  );	
+	return true;
+}
+
+
 async function send_telegram_notification(xss_payload_fire_data, telegram_webhook, telegram_chat_id) {
 	const fire_location = (!xss_payload_fire_data.encrypted ? xss_payload_fire_data.url : 'With An Encryption Key');
 	fetch(
@@ -116,5 +135,6 @@ module.exports = {
 	send_discord_notification,
 	send_slack_notification,
 	send_custom_notification,
-	send_telegram_notification
+	send_telegram_notification,
+	send_custom_GET_notification
  }

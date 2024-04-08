@@ -564,7 +564,12 @@ async function get_app_server() {
 
 function fireSimpleGet(req) {
     if(process.env.WEBHOOK_GET_URL) {
-        notification.send_custom_notification({url: req.url}, process.env.WEBHOOK_GET_URL)
+        let payload = {
+            url: req.url,
+            source: req.ip,
+            headers: req.headers
+        }
+        notification.send_custom_GET_notification(JSON.stringify(payload), process.env.WEBHOOK_GET_URL)
     }
 }
 
