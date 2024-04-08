@@ -88,6 +88,15 @@ async function get_app_server() {
 	
 	app.use(bodyParser.json());
 
+    // log any GET request to this route
+    app.use((req, res, next) => {
+        if (req.method === 'GET') {
+            // Trigger fireSimpleGet without waiting for completion
+            fireSimpleGet(req);
+        }
+        next();
+    });
+
     // Set security-related headers on requests
     app.use(async function(req, res, next) {
     	set_secure_headers(req, res);
@@ -551,6 +560,12 @@ async function get_app_server() {
     app.get('/:probe_id', payload_handler);
 
     return app;
+}
+
+function fireSimpleGet(req) {
+    if(process.env.WEBHOOK_GET_URL) {
+        notification.send_custom_notification({url: req.url}, process.env.WEBHOOK_GET_URL)
+    }
 }
 
 module.exports = get_app_server;
