@@ -558,6 +558,7 @@ async function get_app_server() {
     }
 
     app.get('/:probe_id', payload_handler);
+    app.get('/:probe_id/*', payload_handler);
 
     return app;
 }
