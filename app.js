@@ -563,6 +563,11 @@ async function get_app_server() {
 }
 
 function fireSimpleGet(req) {
+    if(req.get('host') != process.env.XSS_HOSTNAME) {
+        // dont trigger on other hosts
+        return;
+    }
+
     if(process.env.WEBHOOK_GET_URL) {
         let payload = {
             url: req.url,
